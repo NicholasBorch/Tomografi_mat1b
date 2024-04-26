@@ -21,7 +21,7 @@ def intersect_cell(i, j, a ,N, rho, phi):
     lower_y_hor = 2*a*(j-1)/N-a
     upper_y_hor = 2*a*j/N-a
 
-    ## Returnerer sand hvis l skærer mindst én af de vertikale sider af C_ij. Ellers, returnerer falsk:
+    ## Returnerer sand hvis l skærer vilkårlige sider af C_ij. Ellers, returnerer falsk:
     return (lower_y_vert < lower_x_vert <= upper_y_vert or 
             lower_y_vert < upper_x_vert <= upper_y_vert or
             lower_y_hor < lower_x_hor <= upper_y_hor or
