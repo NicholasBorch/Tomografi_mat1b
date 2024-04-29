@@ -37,7 +37,7 @@ def get_length(i,j,a,N,rho,phi):
     if not intersect_cell(i,j,a,N,rho,phi):
         return None
     ## Ellers fortsætter vi:
-    
+
     ## For vertikale linjer:
     ## Udregn y-værdier for l i intervalendepunkterne:
     lower_x_vert = (rho-(2*a*(j-1)/N-a)*cos(phi))/sin(phi) 
@@ -87,3 +87,28 @@ p = 0.35
 arr = np.array([[get_length(6-i, j, 5, 5, rho, p*pi) for j in range(1, 6)] for i in range(1, 6)])
 print(arr)
     
+def create_matrix(a:float, N:int, rho:np.ndarray, phi:np.ndarray):
+    ## Check, at rho og phi har samme længde
+    assert rho.shape == phi.shape, 'rho og phi skal have samme længde'
+    ## Definér M
+    M = len(rho)
+
+    ## Definér matrix A, så elementer kan indsættes
+    A = np.zeros((M,N**2))
+
+    ## Lav en række i A for hver rho-phi par
+    for k, (r, p) in enumerate(zip(rho,phi)):
+        ## 'col' holder styr på, hvilken kolonne, vi arbejder med
+        col = 0
+        for i in range(1,N+1):
+            ## Gennemgå hver j-værdi for hver i-værdi
+            for j in range(1,N+1):
+                ## Få længden af nuværende skæring, og indsæt i A
+                A[k,col] = get_length(i,j,a,N,r,p)
+                ## Gå til næste kolonne
+                col += 1
+    ## Når vi er færdige, returnerer vi A
+    return A
+
+A = create_matrix(5,5,np.array([1,1.5,1.75]),np.array([0.1,0.2,0.3]))
+print('\n\n',A)
