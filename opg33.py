@@ -1,6 +1,7 @@
 # from sympy import *
 import numpy as np
 from numpy import cos, sin, pi
+
 def intersect_cell_oneliner(i, j, a, N, rho, phi):
     return ((2*a*(i-1)/N-a < (rho-(2*a*(j-1)/N-a)*cos(phi))/sin(phi) <= 2*a*i/N-a) or (2*a*(i-1)/N-a < ((rho-(2*a*j/N-a)*cos(phi))/sin(phi)) <= 2*a*i/N-a))
 
@@ -35,7 +36,7 @@ def intersect_cell(i, j, a ,N, rho, phi):
 def get_length(i,j,a,N,rho,phi):
     ## Hvis l ikke skærer C_ij, returner None
     if not intersect_cell(i,j,a,N,rho,phi):
-        return None
+        return 0
     ## Ellers fortsætter vi:
 
     ## For vertikale linjer:
@@ -82,20 +83,17 @@ def get_length(i,j,a,N,rho,phi):
     return np.sqrt((p1[0]-p2[0])**2 + (p1[1]-p2[1])**2) ## Returnerer euklidisk distance mellem skæringspunkter
 
 
-rho = 1
-p = 0.35
-arr = np.array([[get_length(6-i, j, 5, 5, rho, p*pi) for j in range(1, 6)] for i in range(1, 6)])
-print(arr)
+# rho = 1
+# p = 0.35
+# arr = np.array([[get_length(6-i, j, 5, 5, rho, p*pi) for j in range(1, 6)] for i in range(1, 6)])
+# print(arr)
     
-def create_matrix(a:float, N:int, rho:np.ndarray, phi:np.ndarray):
-    ## Check, at rho og phi har samme længde
-    assert rho.shape == phi.shape, 'rho og phi skal have samme længde'
+def create_matrix(a:float, N:int, rho:np.ndarray, phi:np.ndarray) -> np.ndarray:
     ## Definér M
     M = len(rho)
 
     ## Definér matrix A, så elementer kan indsættes
     A = np.zeros((M,N**2))
-
     ## Lav en række i A for hver rho-phi par
     for k, (r, p) in enumerate(zip(rho,phi)):
         ## 'col' holder styr på, hvilken kolonne, vi arbejder med
@@ -110,5 +108,8 @@ def create_matrix(a:float, N:int, rho:np.ndarray, phi:np.ndarray):
     ## Når vi er færdige, returnerer vi A
     return A
 
-A = create_matrix(5,5,np.array([1,1.5,1.75]),np.array([0.1,0.2,0.3]))
-print('\n\n',A)
+# A = create_matrix(5,5,np.array([1,1.5,1.75]),np.array([0.1,0.2,0.3]))
+# print('\n\n',A)
+if __name__ == '__main__':
+    A = create_matrix(5,5,np.array([1,1.5,1.75]),np.array([0.1,0.2,0.3]))
+    print(A)
